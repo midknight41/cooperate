@@ -53,7 +53,7 @@ function forwardProperties(target, sourceObject, index, props, accessors) {
 
 }
 
-export function assemble(...objects) {
+export function compose(...objects) {
 
   const wrapper = {
     __cooperate: []

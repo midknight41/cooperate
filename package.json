@@ -24,11 +24,14 @@
     "url": "git+https://github.com/midknight41/cooperate.git"
   },
   "keywords": [
+    "compose",
     "composition",
     "mixin",
     "inheritance",
     "traits",
-    "talents"
+    "talents",
+    "build",
+    "proxy"
   ],
   "author": "Chad Macey",
   "license": "MIT",

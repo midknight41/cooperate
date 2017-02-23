@@ -3,7 +3,7 @@ import * as Code from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
 
-import { assemble } from "../lib/index";
+import { compose } from "../lib/index";
 
 const lab = exports.lab = Lab.script();
 const expect = Code.expect;
@@ -91,11 +91,11 @@ group("The assemble() function", () => {
     return done();
   });
 
-  testing.throws.functionParameterTest(assemble, ["object1", "object2"], {}, {});
+  testing.throws.functionParameterTest(compose, ["object1", "object2"], {}, {});
 
   lab.test("wraps two objects in a cooperate object", done => {
 
-    const repo = assemble(specific, generic);
+    const repo = compose(specific, generic);
 
     expect(repo).to.be.an.object();
     expect(repo.__cooperate).to.be.an.array();
@@ -106,7 +106,7 @@ group("The assemble() function", () => {
 
   lab.test("methods from the two objects are available on the cooperate object", done => {
 
-    const repo = assemble(specific, generic);
+    const repo = compose(specific, generic);
 
     expect(repo.getSalesByRegion).to.be.a.function();
     expect(repo.insert).to.be.a.function();
@@ -121,7 +121,7 @@ group("The assemble() function", () => {
 
     const throws = function () {
 
-      assemble(overlapping, generic);
+      compose(overlapping, generic);
 
     }
 
@@ -131,7 +131,7 @@ group("The assemble() function", () => {
 
   lab.test("read-only properties from two objects are available on the cooperate object", done => {
 
-    const repo = assemble(specific, generic);
+    const repo = compose(specific, generic);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "connected");
 
@@ -145,7 +145,7 @@ group("The assemble() function", () => {
 
   lab.test("read-write properties from two objects are available on the cooperate object", done => {
 
-    const repo = assemble(specific, generic);
+    const repo = compose(specific, generic);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "rw");
 
@@ -159,7 +159,7 @@ group("The assemble() function", () => {
 
   lab.test("write-only properties from two objects are available on the cooperate object", done => {
 
-    const repo = assemble(specific, generic);
+    const repo = compose(specific, generic);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "wo");
 
@@ -172,7 +172,7 @@ group("The assemble() function", () => {
 
   lab.test("attributes from two objects are available on the cooperate object", done => {
 
-    const repo = assemble(specific, generic);
+    const repo = compose(specific, generic);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "public");
 
@@ -186,7 +186,7 @@ group("The assemble() function", () => {
 
   lab.test("private items are not available on the cooperate object", done => {
 
-    const repo = assemble(specific, generic);
+    const repo = compose(specific, generic);
 
     const props = Object.getOwnPropertyNames(repo);
     

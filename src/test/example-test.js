@@ -1,19 +1,4 @@
-# cooperate
-
-**cooperate** is a convention based composition tool that let's you compose a series of objects into a single object quickly. It does not alter the original objects or prototypes but wraps them in a proxy object. The proxy will perserve the appropriate getters and setters from the original object.
-
-If method/properties/attributes begin or end with an "_" then they will not be exposed on the proxy object.
-
-Note: At present naming collisions are considered errors.
-
-## Installation
-```
-npm install cooperate -S
-```
-
-## Example
-```js
-import { compose } from "cooperate";
+import { compose } from "../lib/index";
 import assert from "assert";
 
 class SpecificFeatures {
@@ -64,8 +49,5 @@ assert(repo.findById);
 assert(repo.getSalesByRegion);
 assert(repo.insert);
 assert(Object.getOwnPropertyDescriptor(repo, "connected"));
-
-// private items are not exposed
 assert((repo.formatQuery_ === undefined));
 assert(Object.getOwnPropertyDescriptor(repo, "_db") === undefined);
-```
