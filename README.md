@@ -1,6 +1,6 @@
 # cooperate
 
-[![Build Status](https://travis-ci.org/midknight41/cooperate.svg?branch=master)](https://travis-ci.org/midknight41/cooperate) [![Coverage Status](https://coveralls.io/repos/github/midknight41/lambshank/badge.svg?branch=master)](https://coveralls.io/github/midknight41/lambshank?branch=master)
+[![Build Status](https://travis-ci.org/midknight41/cooperate.svg?branch=master)](https://travis-ci.org/midknight41/cooperate)
 
 **cooperate** is a convention based composition tool that let's you compose a series of objects into a single object quickly. It does not alter the original objects or prototypes but wraps them in a proxy object. The proxy will perserve the appropriate getters and setters from the original object.
 
