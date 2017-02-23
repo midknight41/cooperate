@@ -1,6 +1,6 @@
 {
   "name": "cooperate",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Convention based composition utility",
   "main": "./dist/lib/index.js",
   "scripts": {
@@ -42,7 +42,7 @@
   "dependencies": {
     "examine-instance": "^0.0.1"
   },
-    "devDependencies": {
+  "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-eslint": "^7.1.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.22.0",
@@ -58,5 +58,4 @@
   "files": [
     "dist"
   ]
-
 }
