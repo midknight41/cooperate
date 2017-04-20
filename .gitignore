@@ -77,6 +77,9 @@ test/*.js
 *ncrunch*
 *crunch*.local.xml
 
+# coverage
+coverage
+
 # visual studio database projects
 *.dbmdl
 
