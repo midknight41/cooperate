@@ -1,7 +1,7 @@
 {
   "name": "cooperate",
   "version": "0.1.1",
-  "description": "Convention based composition utility",
+  "description": "Convention based composition tool that let's you compose a series of objects into a single object quickly.",
   "main": "./dist/lib/index.js",
   "scripts": {
     "prebuild": "npm run clean",
