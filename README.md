@@ -71,3 +71,48 @@ assert(Object.getOwnPropertyDescriptor(repo, "connected"));
 assert((repo.formatQuery_ === undefined));
 assert(Object.getOwnPropertyDescriptor(repo, "_db") === undefined);
 ```
+
+## Dealing with naming collisions
+
+### Normal Example
+```js
+
+const genericFeatures = mapMembers(new GenericFeatures(db))
+  .map("findById").to("findSalesById");
+
+const specificFeatures = new SpecificFeatures(db);
+
+const repo = compose(genericFeatures, specificFeatures);
+
+// Method is remapped
+assert(repo.findSalesById);
+assert((repo.findById === undefined));
+
+```
+
+### Complicated example
+```js
+
+import { compose, mapMethods } from "cooperate";
+import createRepo from "./Repo";
+
+const product = createRepo("products");
+const sale = createRepo("sales");
+
+const productWithMapping = mapMethods(product)
+  .map("getItem").to("getProduct")
+  .map("updateItem").to("updateProduct")
+  .map("insertItem").to("insertProduct")
+  .map("deleteItem").to("deleteProduct");
+
+const salesWithMapping = mapMethods(sale)
+  .map("getItem").to("getSale")
+  .map("updateItem").to("updateSale")
+  .map("insertItem").to("insertSale")
+  .hide("deleteItem");
+
+const combinedRepo = compose(productWithMapping, salesWithMapping);
+
+```
+
+

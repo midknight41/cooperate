@@ -2,6 +2,7 @@
 import * as Code from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
+import { AssertionError } from "assert";
 
 import { compose } from "../lib/index";
 
@@ -50,7 +51,7 @@ class GenericFeatures {
 
 }
 
-class Overlapping {
+class OverlappingMethod {
 
   constructor(db) {
     this._db = db;
@@ -69,7 +70,13 @@ class Overlapping {
 
 }
 
-group("The assemble() function", () => {
+class OverlappingProps {
+
+  get rw() { return "uh oh"; }
+}
+
+
+group("The compose() function", () => {
 
   let db;
   let generic;
@@ -93,6 +100,18 @@ group("The assemble() function", () => {
 
   testing.throws.functionParameterTest(compose, ["object1", "object2"], {}, {});
 
+  lab.test("only allows objects as parameters", done => {
+
+    const throws = function () {
+      compose("test", 1);
+    };
+
+    expect(throws).to.throw(AssertionError, /only objects/);
+
+    return done();
+
+  });
+
   lab.test("wraps two objects in a cooperate object", done => {
 
     const repo = compose(specific, generic);
@@ -115,17 +134,31 @@ group("The assemble() function", () => {
     return done();
   });
 
-  lab.test("throws an error if any methods overlap (no overriding allowed)", done => {
+  lab.test("throws an error if any methods overlap (naming collision)", done => {
 
-    const overlapping = new Overlapping();
+    const overlapping = new OverlappingMethod();
 
     const throws = function () {
 
       compose(overlapping, generic);
 
-    }
+    };
 
-    expect(throws).to.throw(Error, /not allowed/);
+    expect(throws).to.throw(Error, /collision/);
+    return done();
+  });
+
+  lab.test("throws an error if any properties overlap (naming collision)", done => {
+
+    const overlapping = new OverlappingProps();
+
+    const throws = function () {
+
+      compose(overlapping, generic);
+
+    };
+
+    expect(throws).to.throw(Error, /collision/);
     return done();
   });
 
@@ -152,6 +185,10 @@ group("The assemble() function", () => {
     expect(descriptor.get).to.be.a.function();
     expect(descriptor.set).to.be.a.function();
     expect(repo.rw).to.equal("read-write");
+
+    repo.rw = "altered";
+
+    expect(repo.rw).to.equal("altered");
 
     return done();
 
@@ -189,7 +226,7 @@ group("The assemble() function", () => {
     const repo = compose(specific, generic);
 
     const props = Object.getOwnPropertyNames(repo);
-    
+
     expect(props).to.have.length(8);
 
     for (const prop of props) {
