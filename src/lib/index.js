@@ -100,7 +100,7 @@ export function compose(...objects) {
   for (const obj of objects) {
 
     assert(obj, "null and undefined are not allowed");
-    assert(typeof obj === "object", "only objects are supported for composition");
+    assert(typeof obj === "object" && !Array.isArray(obj), "only objects are supported for composition");
 
     // If a provided object is a MemberMaps we extract the mapping rules and source object
     if (obj instanceof MemberMaps) {
