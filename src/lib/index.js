@@ -4,64 +4,71 @@ import MemberMaps from "./MemberMaps";
 
 const noPrivate = /^_|_$/;
 
-function forwardMethods(target, sourceObject, index, methods, mappings) {
+function forwardMethods(wrapper, sourceObject, index, methods, mappings) {
 
+  // for each public method, we want to create a proxy method on the wrapping object
   for (let i = 0; i < methods.length; i++) {
 
     const sourceMethod = methods[i];
 
-    // Ditch private methods
+    // We don't want to map any private methods
     const isPrivate = noPrivate.exec(sourceMethod);
     if (isPrivate) continue;
 
-    // Re-map methods if mapping rules have been provided
+    // change the proxy method name if a different name was provided
     let targetMethod = sourceMethod;
 
     if (mappings !== null && mappings.has(sourceMethod)) {
       targetMethod = mappings.get(sourceMethod).targetName;
     }
 
-    if (target[targetMethod] !== undefined) throw new Error(`Naming collision detected with '${sourceMethod}'. Collisions can be resolved using mapMembers().`);
+    // Naming collisions are not allowed, throw error if detected
+    if (wrapper[targetMethod] !== undefined) throw new Error(`Naming collision detected with '${sourceMethod}'. Collisions can be resolved using mapMembers().`);
 
-    target[targetMethod] = function (...params) { return this.__cooperate[index][sourceMethod](...params); };
+    // create the proxy method on the wrapping object
+    wrapper[targetMethod] = function (...params) { return this.__cooperate[index][sourceMethod](...params); };
 
   }
 
 }
 
-function forwardProperties(target, sourceObject, index, props, accessors, mappings) {
+function forwardProperties(wrapper, sourceObject, index, props, accessors, mappings) {
 
+  // for each public property, we want to create appropriate proxy accessors on the wrapping object
   for (let i = 0; i < props.length; i++) {
 
     const sourceProp = props[i];
 
-    // Ditch private methods
+    // We don't want to map any private properties
     const isPrivate = noPrivate.exec(sourceProp);
     if (isPrivate) continue;
 
-
-    // Re-map methods if mapping rules have been provided
+    // Re-map properties if mapping rules have been provided
     let targetProp = sourceProp;
 
     if (mappings !== null && mappings.has(sourceProp)) {
       targetProp = mappings.get(sourceProp).targetName;
     }
 
-    if (target[targetProp] !== undefined) throw new Error(`Naming collision detected with '${sourceProp}'. Collisions can be resolved using mapMembers().`);
+    // Naming collisions are not allowed, throw error if detected
+    if (wrapper[targetProp] !== undefined) throw new Error(`Naming collision detected with '${sourceProp}'. Collisions can be resolved using mapMembers().`);
 
     const descriptor = {};
 
+    // add get accessor if required
     if (accessors.indexOf("get") > -1) {
       descriptor.get = function () {
         return this.__cooperate[index][sourceProp];
       };
     }
 
+    // add set accessor if required
     if (accessors.indexOf("set") > -1) {
       descriptor.set = function (value) { this.__cooperate[index][sourceProp] = value; };
     }
 
-    Object.defineProperty(target, targetProp, descriptor);
+    // add the property to the wrapping object
+    Object.defineProperty(wrapper, targetProp, descriptor);
 
   }
 
@@ -89,11 +96,13 @@ export function compose(...objects) {
     __cooperate: []
   };
 
+  // take all the source objects, discover public members, and create proxy members on the proxy object.
   for (const obj of objects) {
 
     assert(obj, "null and undefined are not allowed");
     assert(typeof obj === "object", "only objects are supported for composition");
 
+    // If a provided object is a MemberMaps we extract the mapping rules and source object
     if (obj instanceof MemberMaps) {
       mapAllMembers(wrapper, obj.sourceObject, obj.mappings);
     } else {

@@ -1,6 +1,7 @@
 import assert from "assert";
 import MemberMap from "./MemberMap";
 
+// this class represents all the mappings for a single source object
 export default class MemberMaps {
 
   constructor(sourceObject) {
@@ -12,6 +13,9 @@ export default class MemberMaps {
   }
 
   map(sourceName) {
+
+    // create a mapping for a single method and return the mapping
+    // the mapping object enables the fluent/chainable interface
 
     const mapping = new MemberMap(this, sourceName);
     this.registerMapping(mapping);
@@ -26,4 +30,3 @@ export default class MemberMaps {
   }
 
 }
-
