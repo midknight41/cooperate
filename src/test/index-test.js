@@ -112,6 +112,18 @@ group("The compose() function", () => {
 
   });
 
+  lab.test("only allows objects as parameters (not even array)", done => {
+
+    const throws = function () {
+      compose([], {});
+    };
+
+    expect(throws).to.throw(AssertionError, /only objects/);
+
+    return done();
+
+  });
+
   lab.test("wraps two objects in a cooperate object", done => {
 
     const repo = compose(specific, generic);
