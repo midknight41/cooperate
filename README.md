@@ -4,6 +4,8 @@
 
 **cooperate** is a convention based composition tool that let's you compose a series of objects into a single object quickly. It does not alter the original objects or prototypes but wraps them in a proxy object. The proxy object will forward the method calls to the appropriate underlying object methods and perserves the appropriate behaviour of your getters and setters too.
 
+See [Change Log](./CHANGELOG.md) for changes from previous versions.
+
 ## Installation
 ```
 npm install cooperate -S
@@ -132,7 +134,6 @@ const repo = compose(genericWithMapping, specificFeatures);
 // Method is remapped
 assert(repo.findSalesById);
 assert(repo.findById === undefined);
-
 ```
 
 ### Example 2
