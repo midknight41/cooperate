@@ -160,3 +160,22 @@ const salesWithMapping = mapMembers(sale)
 const combinedRepo = compose(productWithMapping, salesWithMapping);
 
 ```
+Methods that you don't want to expose can also being hidden if required.
+
+```js
+import { compose, mapMembers } from "cooperate";
+
+const genericFeatures = new GenericFeatures(db);
+const specificFeatures = new SpecificFeatures(db);
+
+const genericWithMapping = mapMembers(genericFeatures)
+  .map("findById").to("findSalesById")
+  .hide("deleteItem");
+
+const repo = compose(genericWithMapping, specificFeatures);
+
+assert(repo.findSalesById);
+assert(repo.findById === undefined);
+assert(repo.deleteItem === undefined);
+
+```
