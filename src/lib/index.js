@@ -20,6 +20,8 @@ function forwardMethods(wrapper, sourceObject, index, methods, mappings) {
     let targetMethod = sourceMethod;
 
     if (mappings !== null && mappings.has(sourceMethod)) {
+
+      if (mappings.get(sourceMethod).hidden) continue;
       targetMethod = mappings.get(sourceMethod).targetName;
     }
 
@@ -48,7 +50,10 @@ function forwardProperties(wrapper, sourceObject, index, props, accessors, mappi
     let targetProp = sourceProp;
 
     if (mappings !== null && mappings.has(sourceProp)) {
+
+      if (mappings.get(sourceProp).hidden) continue;
       targetProp = mappings.get(sourceProp).targetName;
+
     }
 
     // Naming collisions are not allowed, throw error if detected

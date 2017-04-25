@@ -3,7 +3,6 @@ import * as Code from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
 import { AssertionError } from "assert";
-import examine from "examine-instance";
 
 import { compose } from "../lib/index";
 import {

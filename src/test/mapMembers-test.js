@@ -5,7 +5,7 @@ import { compose, mapMembers } from "../lib";
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
-const group = testing.createExperiment("cooperate");
+const group = testing.createExperiment("cooperate", "MemberMaps");
 
 class TestClass {
 
@@ -129,5 +129,66 @@ group("The to() method", () => {
   const mapping = descriptor.map("abc");
 
   testing.throws.methodParameterTest(mapping, mapping.to, ["to"], "abc");
+
+});
+
+group("The hide() method", () => {
+
+  const obj = new TestClass();
+  const descriptor = mapMembers(obj);
+
+  testing.throws.methodParameterTest(descriptor, descriptor.hide, ["from"], "abc");
+
+});
+
+group("The hide() method", () => {
+
+  lab.test("marks a member for hiding from a mapping", done => {
+
+    const obj = new TestClass();
+    const descriptor = mapMembers(obj);
+
+    const mapping = descriptor.map("abc");
+
+    mapping.hide();
+
+    expect(mapping.hidden).to.be.true();
+
+    return done();
+
+  });
+
+  lab.test("marks a member for hiding from the parent", done => {
+
+    const obj = new TestClass();
+    const descriptor = mapMembers(obj);
+
+    descriptor.hide("abc");
+
+    expect(descriptor.mappings.get("abc").hidden).to.be.true();
+
+    return done();
+
+  });
+
+  lab.experiment("when used with compose()", () => {
+
+    lab.test("a hidden method is not exposed on the cooperate object", done => {
+
+      const obj = new TestClass();
+      const descriptor = mapMembers(obj);
+
+      descriptor.hide("getItem");
+
+      const result = compose(descriptor);
+
+      expect(result).to.be.an.object();
+      expect(result.getItem).to.be.undefined();
+
+      return done();
+
+    });
+
+  });
 
 });

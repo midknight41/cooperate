@@ -24,6 +24,20 @@ export default class MemberMaps {
 
   }
 
+  hide(sourceName) {
+
+    // shortcut for map("method").hide()
+    // a hidden member will not appear on the cooperate object
+
+    const mapping = new MemberMap(this, sourceName);
+    mapping.hide();
+
+    this.registerMapping(mapping);
+
+    return this;
+
+  }
+
   registerMapping(mapping) {
 
     this.mappings.set(mapping.sourceName, mapping);

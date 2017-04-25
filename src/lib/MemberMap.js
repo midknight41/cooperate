@@ -9,7 +9,10 @@ export default class MemberMap {
 
     this.sourceName = sourceName;
     this.parent_ = parent;
+    this.hidden_ = false;
   }
+
+  get hidden() { return this.hidden_; }
 
   to(targetName) {
 
@@ -21,6 +24,11 @@ export default class MemberMap {
 
     return this.parent_;
 
+  }
+
+  hide() {
+    this.hidden_ = true;
+    return this.parent_;
   }
 
 }
