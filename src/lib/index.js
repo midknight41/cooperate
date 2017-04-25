@@ -1,6 +1,7 @@
 import examine from "examine-instance";
 import assert from "assert";
 import MemberMaps from "./MemberMaps";
+import CooperateWrapper from "./CooperateWrapper";
 
 const noPrivate = /^_|_$/;
 
@@ -26,7 +27,7 @@ function forwardMethods(wrapper, sourceObject, index, methods, mappings) {
     if (wrapper[targetMethod] !== undefined) throw new Error(`Naming collision detected with '${sourceMethod}'. Collisions can be resolved using mapMembers().`);
 
     // create the proxy method on the wrapping object
-    wrapper[targetMethod] = function (...params) { return this.__cooperate[index][sourceMethod](...params); };
+    wrapper[targetMethod] = function (...params) { return this.__cooperate.get(index)[sourceMethod](...params); };
 
   }
 
@@ -58,13 +59,13 @@ function forwardProperties(wrapper, sourceObject, index, props, accessors, mappi
     // add get accessor if required
     if (accessors.indexOf("get") > -1) {
       descriptor.get = function () {
-        return this.__cooperate[index][sourceProp];
+        return this.__cooperate.get(index)[sourceProp];
       };
     }
 
     // add set accessor if required
     if (accessors.indexOf("set") > -1) {
-      descriptor.set = function (value) { this.__cooperate[index][sourceProp] = value; };
+      descriptor.set = function (value) { this.__cooperate.get(index)[sourceProp] = value; };
     }
 
     // add the property to the wrapping object
@@ -76,25 +77,24 @@ function forwardProperties(wrapper, sourceObject, index, props, accessors, mappi
 
 function mapAllMembers(wrapper, obj, mappings) {
 
-  wrapper.__cooperate.push(obj);
+  // TODO: replace with a uuid
+  const key = `idx_${wrapper.__cooperate.size}`;
+
+  wrapper.__cooperate.set(key, obj);
   const examination = examine(obj);
 
   // create proxies to forward all methods, properties and attributes
-  const currentIndex = wrapper.__cooperate.length - 1;
-
-  forwardMethods(wrapper, obj, currentIndex, examination.methods, mappings);
-  forwardProperties(wrapper, obj, currentIndex, examination.readWrite, ["get", "set"], mappings);
-  forwardProperties(wrapper, obj, currentIndex, examination.attributes, ["get", "set"], mappings);
-  forwardProperties(wrapper, obj, currentIndex, examination.readOnly, ["get"], mappings);
-  forwardProperties(wrapper, obj, currentIndex, examination.writeOnly, ["set"], mappings);
+  forwardMethods(wrapper, obj, key, examination.methods, mappings);
+  forwardProperties(wrapper, obj, key, examination.readWrite, ["get", "set"], mappings);
+  forwardProperties(wrapper, obj, key, examination.attributes, ["get", "set"], mappings);
+  forwardProperties(wrapper, obj, key, examination.readOnly, ["get"], mappings);
+  forwardProperties(wrapper, obj, key, examination.writeOnly, ["set"], mappings);
 
 }
 
 export function compose(...objects) {
 
-  const wrapper = {
-    __cooperate: []
-  };
+  const wrapper = new CooperateWrapper();
 
   // take all the source objects, discover public members, and create proxy members on the proxy object.
   for (const obj of objects) {
@@ -105,9 +105,15 @@ export function compose(...objects) {
     // If a provided object is a MemberMaps we extract the mapping rules and source object
     if (obj instanceof MemberMaps) {
       mapAllMembers(wrapper, obj.sourceObject, obj.mappings);
-    } else {
-      mapAllMembers(wrapper, obj, null);
+      continue;
     }
+
+    // TODO: Flatten structure of cooperate wrappers
+    // if (obj instanceof CooperateWrapper) {
+    //   continue;
+    // }
+
+    mapAllMembers(wrapper, obj, null);
 
   }
 

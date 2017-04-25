@@ -77,8 +77,8 @@ group("The mapMembers() function", () => {
       const result = compose(raw, descriptor);
 
       expect(result).to.be.an.object();
-      expect(result.__cooperate).to.be.an.array();
-      expect(result.__cooperate).to.have.length(2);
+      expect(result.__cooperate).to.be.an.object();
+      expect(result.__cooperate.size).to.equal(2);
 
       return done();
 

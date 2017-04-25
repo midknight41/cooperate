@@ -3,78 +3,20 @@ import * as Code from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
 import { AssertionError } from "assert";
+import examine from "examine-instance";
 
 import { compose } from "../lib/index";
+import {
+  SpecificFeatures, GenericFeatures,
+  OverlappingMethod, OverlappingProps,
+  MultipleA, MultipleB, MultipleC, MultipleCollision
+} from "./testClasses";
 
 const lab = exports.lab = Lab.script();
 const expect = Code.expect;
 const testing = getHelper(lab);
 
 const group = testing.createExperiment("cooperate");
-
-class SpecificFeatures {
-
-  constructor(db) {
-    this._db = db;
-    this.public = "public";
-  }
-
-  getSalesByRegion(regionName) {
-
-    const query = { regionName };
-
-    return this._db.query(query);
-  }
-
-}
-
-class GenericFeatures {
-
-  constructor(db) {
-    this._genericDb = db;
-    this._rw = "read-write";
-    this._wo = "write-only";
-  }
-
-  get connected() { return this._genericDb.connected; }
-  get rw() { return this._rw; }
-  set rw(value) { this._rw = value; }
-  set wo(value) { this._wo = value; }
-
-  insert(data) {
-    this._genericDb.insert(data);
-  }
-
-  findById(id) {
-    return this._genericDb.query({ _id: id });
-  }
-
-}
-
-class OverlappingMethod {
-
-  constructor(db) {
-    this._db = db;
-  }
-
-  getSalesByRegion(regionName) {
-
-    const query = { regionName };
-
-    return this._db.query(query);
-  }
-
-  findById(id) {
-    return this._db.query({ _id: id });
-  }
-
-}
-
-class OverlappingProps {
-
-  get rw() { return "uh oh"; }
-}
-
 
 group("The compose() function", () => {
 
@@ -129,8 +71,8 @@ group("The compose() function", () => {
     const repo = compose(specific, generic);
 
     expect(repo).to.be.an.object();
-    expect(repo.__cooperate).to.be.an.array();
-    expect(repo.__cooperate).to.have.length(2);
+    expect(repo.__cooperate).to.be.an.object();
+    expect(repo.__cooperate.size).to.equal(2);
 
     return done();
   });
@@ -249,6 +191,50 @@ group("The compose() function", () => {
     }
 
     return done();
+
+  });
+
+  lab.experiment("when it wraps another cooperate object", () => {
+
+    lab.test("it maps all members correctly on both objects", done => {
+
+      const a = new MultipleA();
+      const b = new MultipleB();
+      const c = new MultipleC();
+
+      const first = compose(a, b);
+      const result = compose(first, c);
+
+      expect(result).to.be.an.object();
+      expect(result.one).to.be.a.function();
+      expect(result.two).to.be.a.function();
+      expect(result.three).to.be.a.function();
+      expect(result.one()).to.equal("one");
+      expect(result.two()).to.equal("two");
+      expect(result.three()).to.equal("three");
+
+      return done();
+
+    });
+
+    lab.test("it errors on a naming collision", done => {
+
+      const a = new MultipleA();
+      const b = new MultipleB();
+      const c = new MultipleC();
+      const bad = new MultipleCollision();
+
+      const first = compose(a, b);
+
+      const throws = function () {
+        return compose(first, c, bad);
+      };
+
+      expect(throws).to.throw(Error, /collision/);
+
+      return done();
+
+    });
 
   });
 
