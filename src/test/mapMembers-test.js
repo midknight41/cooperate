@@ -189,6 +189,22 @@ group("The hide() method", () => {
 
     });
 
+    lab.test("a hidden property is not exposed on the cooperate object", done => {
+
+      const obj = new TestClass();
+      const descriptor = mapMembers(obj);
+
+      descriptor.hide("uniqueValue");
+
+      const result = compose(descriptor);
+
+      expect(result).to.be.an.object();
+      expect(result.uniqueValue).to.be.undefined();
+
+      return done();
+
+    });
+
   });
 
 });
