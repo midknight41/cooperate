@@ -1,6 +1,6 @@
 {
   "name": "cooperate",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Convention based composition tool that let's you compose a series of objects into a single object quickly.",
   "main": "./dist/lib/index.js",
   "scripts": {
