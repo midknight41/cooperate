@@ -184,7 +184,7 @@ assert(repo.findSalesById);
 assert(repo.findById === undefined);
 assert(repo.deleteItem === undefined);
 ```
-If the object you are trying to compose have a uniform interface then there is also an option on the ```compose()``` method to make this easier.
+If the objects you are trying to compose have a uniform interface then there is also an option on the ```compose()``` method to make this easier.
 
 ```js
 import { compose } from "cooperate";
