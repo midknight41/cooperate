@@ -74,7 +74,7 @@ group("The mapMembers() function", () => {
 
     lab.test("the cooperate wrapper is correct", done => {
 
-      const result = compose(raw, descriptor);
+      const result = compose([raw, descriptor]);
 
       expect(result).to.be.an.object();
       expect(result.__cooperate).to.be.an.object();
@@ -86,7 +86,7 @@ group("The mapMembers() function", () => {
 
     lab.test("the mapping of a method alters the output of compose correctly", done => {
 
-      const result = compose(raw, descriptor);
+      const result = compose([raw, descriptor]);
 
       expect(result.getItem).to.be.a.function();
       expect(result.getTestItem).to.be.a.function();
@@ -99,7 +99,7 @@ group("The mapMembers() function", () => {
 
     lab.test("the mapping of a property alters the output of compose correctly", done => {
 
-      const result = compose(raw, descriptor);
+      const result = compose([raw, descriptor]);
 
       expect(result.uniqueValue).to.equal("raw-object-1");
       expect(result.moreUniqueValue).to.equal("object-1");
@@ -180,7 +180,7 @@ group("The hide() method", () => {
 
       descriptor.hide("getItem");
 
-      const result = compose(descriptor);
+      const result = compose([descriptor]);
 
       expect(result).to.be.an.object();
       expect(result.getItem).to.be.undefined();
@@ -196,7 +196,7 @@ group("The hide() method", () => {
 
       descriptor.hide("uniqueValue");
 
-      const result = compose(descriptor);
+      const result = compose([descriptor]);
 
       expect(result).to.be.an.object();
       expect(result.uniqueValue).to.be.undefined();

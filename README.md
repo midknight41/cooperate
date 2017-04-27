@@ -48,7 +48,7 @@ import { compose } from "cooperate";
 const capability1 = new Capability1();
 const capability2 = new Capability2();
 
-const combined = compose(capability1, capability2);
+const combined = compose([capability1, capability2]);
 ```
 
 JavaScript does not really have the concept of privacy but it is very common for developers to use an ```_``` to mark methods as private. **cooperate** follows this convention and will not expose anything that begins or ends with an ```_``` on the combined object.
@@ -99,7 +99,7 @@ const db = {};
 const genericFeatures = new GenericFeatures(db);
 const specificFeatures = new SpecificFeatures(db);
 
-const repo = compose(genericFeatures, specificFeatures);
+const repo = compose([genericFeatures, specificFeatures]);
 
 // Creates an object with no shared state
 assert(repo.findById);
@@ -129,7 +129,7 @@ const specificFeatures = new SpecificFeatures(db);
 const genericWithMapping = mapMembers(genericFeatures)
   .map("findById").to("findSalesById");
 
-const repo = compose(genericWithMapping, specificFeatures);
+const repo = compose([genericWithMapping, specificFeatures]);
 
 // Method is remapped
 assert(repo.findSalesById);
@@ -158,7 +158,7 @@ const salesWithMapping = mapMembers(sale)
   .map("insertItem").to("insertSale")
   .map("deleteItem").to("deleteSale");
 
-const combinedRepo = compose(productWithMapping, salesWithMapping);
+const combinedRepo = compose([productWithMapping, salesWithMapping]);
 
 ```
 Methods that you don't want to expose can also being hidden if required.
@@ -173,7 +173,7 @@ const genericWithMapping = mapMembers(genericFeatures)
   .map("findById").to("findSalesById")
   .hide("deleteItem");
 
-const repo = compose(genericWithMapping, specificFeatures);
+const repo = compose([genericWithMapping, specificFeatures]);
 
 assert(repo.findSalesById);
 assert(repo.findById === undefined);

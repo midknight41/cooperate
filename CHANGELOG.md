@@ -1,3 +1,19 @@
+### 2.0.0
+
+The method signature for compose has been changed from a parameter array to a normal array of objects. This is to allow a set of options to be used when calling compose. This is a **breaking change**. 
+
+Old Code:
+
+```js
+  const result = compose(a, b);
+```
+
+New Code:
+
+```js
+  const result = compose([a, b]);
+```
+
 ### 1.1.0
 
 Added ```hide()``` method for ```mapMembers()```.

@@ -39,12 +39,36 @@ group("The compose() function", () => {
     return done();
   });
 
-  testing.throws.functionParameterTest(compose, ["object1", "object2"], {}, {});
+  testing.throws.functionParameterTest(compose, ["objectArray"], [{}, {}]);
+
+  lab.test("doesn't allow null in the array", done => {
+
+    const throws = function () {
+      compose([null, {}]);
+    };
+
+    expect(throws).to.throw(AssertionError, /null and undefined/);
+
+    return done();
+
+  });
+
+  lab.test("doesn't allow undefined in the array", done => {
+
+    const throws = function () {
+      compose([undefined, {}]);
+    };
+
+    expect(throws).to.throw(AssertionError, /null and undefined/);
+
+    return done();
+
+  });
 
   lab.test("only allows objects as parameters", done => {
 
     const throws = function () {
-      compose("test", 1);
+      compose(["test", 1]);
     };
 
     expect(throws).to.throw(AssertionError, /only objects/);
@@ -56,7 +80,7 @@ group("The compose() function", () => {
   lab.test("only allows objects as parameters (not even array)", done => {
 
     const throws = function () {
-      compose([], {});
+      compose([[], {}]);
     };
 
     expect(throws).to.throw(AssertionError, /only objects/);
@@ -67,7 +91,7 @@ group("The compose() function", () => {
 
   lab.test("wraps two objects in a cooperate object", done => {
 
-    const repo = compose(specific, generic);
+    const repo = compose([specific, generic]);
 
     expect(repo).to.be.an.object();
     expect(repo.__cooperate).to.be.an.object();
@@ -78,7 +102,7 @@ group("The compose() function", () => {
 
   lab.test("methods from the two objects are available on the cooperate object", done => {
 
-    const repo = compose(specific, generic);
+    const repo = compose([specific, generic]);
 
     expect(repo.getSalesByRegion).to.be.a.function();
     expect(repo.insert).to.be.a.function();
@@ -93,7 +117,7 @@ group("The compose() function", () => {
 
     const throws = function () {
 
-      compose(overlapping, generic);
+      compose([overlapping, generic]);
 
     };
 
@@ -107,7 +131,7 @@ group("The compose() function", () => {
 
     const throws = function () {
 
-      compose(overlapping, generic);
+      compose([overlapping, generic]);
 
     };
 
@@ -117,7 +141,7 @@ group("The compose() function", () => {
 
   lab.test("read-only properties from two objects are available on the cooperate object", done => {
 
-    const repo = compose(specific, generic);
+    const repo = compose([specific, generic]);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "connected");
 
@@ -131,7 +155,7 @@ group("The compose() function", () => {
 
   lab.test("read-write properties from two objects are available on the cooperate object", done => {
 
-    const repo = compose(specific, generic);
+    const repo = compose([specific, generic]);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "rw");
 
@@ -149,7 +173,7 @@ group("The compose() function", () => {
 
   lab.test("write-only properties from two objects are available on the cooperate object", done => {
 
-    const repo = compose(specific, generic);
+    const repo = compose([specific, generic]);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "wo");
 
@@ -162,7 +186,7 @@ group("The compose() function", () => {
 
   lab.test("attributes from two objects are available on the cooperate object", done => {
 
-    const repo = compose(specific, generic);
+    const repo = compose([specific, generic]);
 
     const descriptor = Object.getOwnPropertyDescriptor(repo, "public");
 
@@ -176,7 +200,7 @@ group("The compose() function", () => {
 
   lab.test("private items are not available on the cooperate object", done => {
 
-    const repo = compose(specific, generic);
+    const repo = compose([specific, generic]);
 
     const props = Object.getOwnPropertyNames(repo);
 
@@ -193,6 +217,56 @@ group("The compose() function", () => {
 
   });
 
+  lab.experiment("when working with options", () => {
+
+    function noNegativeOptionsEffect(done, opts) {
+
+      const one = new MultipleA();
+      const two = new MultipleB();
+
+      const result = compose([one, two], opts);
+
+      expect(result.one).to.be.a.function();
+      expect(result.two).to.be.a.function();
+
+      return done();
+
+    }
+
+    lab.test("A null options object has no negative effects", done =>
+      noNegativeOptionsEffect(done, null));
+
+    lab.test("An undefined options object has no negative effects", done =>
+      noNegativeOptionsEffect(done, undefined));
+
+    lab.test("An empty options object has no negative effects", done =>
+      noNegativeOptionsEffect(done, {}));
+
+    lab.test("A null hide option has no negative effects", done =>
+      noNegativeOptionsEffect(done, { hide: null }));
+
+    lab.test("An undefined hide option has no negative effects", done =>
+      noNegativeOptionsEffect(done, { hide: undefined }));
+
+    lab.test("An empty hide option has no negative effects", done =>
+      noNegativeOptionsEffect(done, { hide: [] }));
+
+    lab.test("it can hide a method properly when the option is supplied", done => {
+
+      const one = new MultipleC();
+      const two = new MultipleCollision();
+
+      const result = compose([one, two], { hide: ["three"] });
+
+      expect(result.tres).to.be.a.function();
+      expect(result.trois).to.be.a.function();
+      expect(result.three).to.be.undefined();
+
+      return done();
+
+    });
+  });
+
   lab.experiment("when it wraps another cooperate object", () => {
 
     lab.test("it maps all members correctly on both objects", done => {
@@ -201,8 +275,8 @@ group("The compose() function", () => {
       const b = new MultipleB();
       const c = new MultipleC();
 
-      const first = compose(a, b);
-      const result = compose(first, c);
+      const first = compose([a, b]);
+      const result = compose([first, c]);
 
       expect(result).to.be.an.object();
       expect(result.one).to.be.a.function();
@@ -223,10 +297,10 @@ group("The compose() function", () => {
       const c = new MultipleC();
       const bad = new MultipleCollision();
 
-      const first = compose(a, b);
+      const first = compose([a, b]);
 
       const throws = function () {
-        return compose(first, c, bad);
+        return compose([first, c, bad]);
       };
 
       expect(throws).to.throw(Error, /collision/);
