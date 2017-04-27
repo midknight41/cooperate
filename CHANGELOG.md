@@ -1,18 +1,36 @@
 ### 2.0.0
 
-The method signature for compose has been changed from a parameter array to a normal array of objects. This is to allow a set of options to be used when calling compose. This is a **breaking change**. 
+The method signature for compose has been changed from a parameter array to a normal array of objects. This is a **breaking change**. 
 
-Old Code:
+#### Old Code
 
 ```js
   const result = compose(a, b);
 ```
 
-New Code:
+#### New Code
 
 ```js
   const result = compose([a, b]);
 ```
+
+As a result of this change, options can now be provided to the compose method. The ```hide``` option in now available.
+
+```js
+import { compose } from "cooperate";
+import assert from "assert";
+
+// Assume all three capabilities here support a property called isWorking.
+import capability1 from "./ capability1";
+import capability2 from "./ capability2"; 
+import capability3 from "./ capability3";
+
+const service = compose([capability1, capability2, capability3], { hide: ["isWorking"] });
+
+// no naming collisions and no isWorking property on the resulting object
+assert(service.isWorking === undefined);
+```
+
 
 ### 1.1.0
 
