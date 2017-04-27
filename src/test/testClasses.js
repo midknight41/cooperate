@@ -78,11 +78,19 @@ export class MultipleC {
   three() {
     return this.three.name;
   }
+
+  tres() {
+    return this.tres.name;
+  }
 }
 
 export class MultipleCollision {
   three() {
     return this.three.name;
+  }
+
+  trois() {
+    return this.trois.name;
   }
 }
 

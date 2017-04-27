@@ -42,7 +42,7 @@ const db = {};
 const genericFeatures = new GenericFeatures(db);
 const specificFeatures = new SpecificFeatures(db);
 
-const repo = compose(genericFeatures, specificFeatures);
+const repo = compose([genericFeatures, specificFeatures]);
 
 // Creates an object with no shared state and does not expose private methods
 assert(repo.findById);

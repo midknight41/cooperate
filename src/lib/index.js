@@ -97,28 +97,47 @@ function mapAllMembers(wrapper, obj, mappings) {
 
 }
 
-export function compose(...objects) {
+
+function processOptions(obj, options) {
+
+  let descriptor;
+
+  // All downstream processing will be of a MemberMaps
+  if (obj instanceof MemberMaps) {
+    descriptor = obj;
+  } else {
+    descriptor = new MemberMaps(obj);
+  }
+
+  // If any hide options were provided mark that object for hiding downstream
+  if (options.hide.length > 0) {
+    for (const method of options.hide) {
+      descriptor.hide(method);
+    }
+  }
+
+  return descriptor;
+
+}
+
+export function compose(objectArray, options) {
+
+  // make options safe to use
+  const opts = options || {};
+  opts.hide = opts.hide || [];
+
+  assert(Array.isArray(objectArray), "an array of objects is required");
 
   const wrapper = new CooperateWrapper();
 
   // take all the source objects, discover public members, and create proxy members on the proxy object.
-  for (const obj of objects) {
+  for (const obj of objectArray) {
 
     assert(obj, "null and undefined are not allowed");
     assert(typeof obj === "object" && !Array.isArray(obj), "only objects are supported for composition");
 
-    // If a provided object is a MemberMaps we extract the mapping rules and source object
-    if (obj instanceof MemberMaps) {
-      mapAllMembers(wrapper, obj.sourceObject, obj.mappings);
-      continue;
-    }
-
-    // TODO: Flatten structure of cooperate wrappers
-    // if (obj instanceof CooperateWrapper) {
-    //   continue;
-    // }
-
-    mapAllMembers(wrapper, obj, null);
+    const descriptor = processOptions(obj, opts);
+    mapAllMembers(wrapper, descriptor.sourceObject, descriptor.mappings);
 
   }
 
