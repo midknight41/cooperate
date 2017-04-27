@@ -116,9 +116,11 @@ assert(Object.getOwnPropertyDescriptor(repo, "_db") === undefined);
 
 With any form of composition you will eventually come across a problem with two things that have the same name. **cooperate** will throw an error if you try and do this as it cannot decide what to do without your help. 
 
-To help with this problem, **cooperate** provides the ```mapMembers()``` function.
+### Mapping Members
 
-### Example 1
+To help with this problem, **cooperate** provides the ```mapMembers()``` function. This lets you define your method forward rules per object.
+
+#### Example 1
 
 ```js
 import { compose, mapMembers } from "cooperate";
@@ -136,7 +138,7 @@ assert(repo.findSalesById);
 assert(repo.findById === undefined);
 ```
 
-### Example 2
+#### Example 2
 
 ```js
 
@@ -161,10 +163,13 @@ const salesWithMapping = mapMembers(sale)
 const combinedRepo = compose([productWithMapping, salesWithMapping]);
 
 ```
-Methods that you don't want to expose can also being hidden if required.
+### Hiding Members
+
+The ```mapMembers()``` can also be used with members that you don't want to expose on the **cooperate** object. This can be achieved with the ```hide()``` method.
 
 ```js
 import { compose, mapMembers } from "cooperate";
+import assert from "assert";
 
 const genericFeatures = new GenericFeatures(db);
 const specificFeatures = new SpecificFeatures(db);
@@ -178,5 +183,20 @@ const repo = compose([genericWithMapping, specificFeatures]);
 assert(repo.findSalesById);
 assert(repo.findById === undefined);
 assert(repo.deleteItem === undefined);
+```
+If the object you are trying to compose have a uniform interface then there is also an option on the ```compose()``` method to make this easier.
 
+```js
+import { compose } from "cooperate";
+import assert from "assert";
+
+// Assume all three capabilities here support a property called isWorking.
+import capability1 from "./ capability1";
+import capability2 from "./ capability2"; 
+import capability3 from "./ capability3";
+
+const service = compose([capability1, capability2, capability3], { hide: ["isWorking"] });
+
+// no naming collisions and no isWorking property on the resulting object
+assert(service.isWorking === undefined);
 ```

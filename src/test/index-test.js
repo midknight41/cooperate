@@ -248,7 +248,7 @@ group("The compose() function", () => {
     lab.test("An undefined hide option has no negative effects", done =>
       noNegativeOptionsEffect(done, { hide: undefined }));
 
-    lab.test("An empty hide option has no negative effects", done =>
+    lab.test("An empty array hide option has no negative effects", done =>
       noNegativeOptionsEffect(done, { hide: [] }));
 
     lab.test("it can hide a method properly when the option is supplied", done => {
