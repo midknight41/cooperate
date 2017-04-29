@@ -1,3 +1,7 @@
+### 2.0.1
+
+Updated dependencies.
+
 ### 2.0.0
 
 The method signature for compose has been changed from a parameter array to a normal array of objects. This is a **breaking change**. 
