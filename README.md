@@ -1,5 +1,7 @@
 # cooperate
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/midknight41/cooperate.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/midknight41/cooperate.svg?branch=master)](https://travis-ci.org/midknight41/cooperate)
 
 **cooperate** is a convention based composition tool that let's you compose a series of objects into a single object quickly. It does not alter the original objects or prototypes but wraps them in a proxy object. The proxy object will forward the method calls to the appropriate underlying object methods and perserves the appropriate behaviour of your getters and setters too.
