@@ -26,17 +26,15 @@ group("The mapMembers() function", () => {
 
   let descriptor;
 
-  lab.beforeEach(done => {
+  lab.beforeEach(() => {
 
     const obj = new TestClass("object-1");
 
     descriptor = mapMembers(obj);
 
-    return done();
-
   });
 
-  lab.test("can properly register a mapping", done => {
+  lab.test("can properly register a mapping", () => {
 
     const sourceName = "getItem";
     const targetName = "getTestItem";
@@ -47,16 +45,13 @@ group("The mapMembers() function", () => {
     expect(descriptor).to.be.an.object();
     expect(descriptor.mappings.get(sourceName).sourceName).to.equal(sourceName);
     expect(descriptor.mappings.get(sourceName).targetName).to.equal(targetName);
-
-    return done();
-
   });
 
   lab.experiment("when used with compose()", () => {
 
     let raw;
 
-    lab.beforeEach(done => {
+    lab.beforeEach(() => {
 
       const obj = new TestClass("object-1");
 
@@ -68,11 +63,9 @@ group("The mapMembers() function", () => {
 
       raw = new TestClass("raw-object-1");
 
-      return done();
-
     });
 
-    lab.test("the cooperate wrapper is correct", done => {
+    lab.test("the cooperate wrapper is correct", () => {
 
       const result = compose([raw, descriptor]);
 
@@ -80,11 +73,9 @@ group("The mapMembers() function", () => {
       expect(result.__cooperate).to.be.an.object();
       expect(result.__cooperate.size).to.equal(2);
 
-      return done();
-
     });
 
-    lab.test("the mapping of a method alters the output of compose correctly", done => {
+    lab.test("the mapping of a method alters the output of compose correctly", () => {
 
       const result = compose([raw, descriptor]);
 
@@ -93,18 +84,14 @@ group("The mapMembers() function", () => {
       expect(result.getItem(1)).to.equal("raw-object-1-1");
       expect(result.getTestItem(1)).to.equal("object-1-1");
 
-      return done();
-
     });
 
-    lab.test("the mapping of a property alters the output of compose correctly", done => {
+    lab.test("the mapping of a property alters the output of compose correctly", () => {
 
       const result = compose([raw, descriptor]);
 
       expect(result.uniqueValue).to.equal("raw-object-1");
       expect(result.moreUniqueValue).to.equal("object-1");
-
-      return done();
 
     });
 
@@ -143,7 +130,7 @@ group("The hide() method", () => {
 
 group("The hide() method", () => {
 
-  lab.test("marks a member for hiding from a mapping", done => {
+  lab.test("marks a member for hiding from a mapping", () => {
 
     const obj = new TestClass();
     const descriptor = mapMembers(obj);
@@ -154,11 +141,9 @@ group("The hide() method", () => {
 
     expect(mapping.hidden).to.be.true();
 
-    return done();
-
   });
 
-  lab.test("marks a member for hiding from the parent", done => {
+  lab.test("marks a member for hiding from the parent", () => {
 
     const obj = new TestClass();
     const descriptor = mapMembers(obj);
@@ -167,13 +152,11 @@ group("The hide() method", () => {
 
     expect(descriptor.mappings.get("abc").hidden).to.be.true();
 
-    return done();
-
   });
 
   lab.experiment("when used with compose()", () => {
 
-    lab.test("a hidden method is not exposed on the cooperate object", done => {
+    lab.test("a hidden method is not exposed on the cooperate object", () => {
 
       const obj = new TestClass();
       const descriptor = mapMembers(obj);
@@ -185,11 +168,9 @@ group("The hide() method", () => {
       expect(result).to.be.an.object();
       expect(result.getItem).to.be.undefined();
 
-      return done();
-
     });
 
-    lab.test("a hidden property is not exposed on the cooperate object", done => {
+    lab.test("a hidden property is not exposed on the cooperate object", () => {
 
       const obj = new TestClass();
       const descriptor = mapMembers(obj);
@@ -200,8 +181,6 @@ group("The hide() method", () => {
 
       expect(result).to.be.an.object();
       expect(result.uniqueValue).to.be.undefined();
-
-      return done();
 
     });
 
