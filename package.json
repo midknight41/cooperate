@@ -4,16 +4,10 @@
   "description": "Convention based composition tool that let's you compose a series of objects into a single object quickly.",
   "main": "./dist/lib/index.js",
   "scripts": {
-    "prebuild": "npm run clean",
-    "build": "babel ./src -d dist",
-    "clean": "./node_modules/.bin/rimraf dist/*",
-    "precover": "npm run build",
     "cover": "istanbul cover ./node_modules/lab/bin/lab ./dist/test --leaks",
-    "pret": "npm run build",
-    "t": "lab ./dist/test/ -v -S --assert code",
-    "pretest": "npm run build",
+    "t": "lab ./test/ -v -S --assert code",
     "travis": "npm run test",
-    "test": "lab ./dist/test/ -v -S --assert code",
+    "test": "lab ./test/ -v -S --assert code",
     "premajor": "npm run test",
     "major": "npm version major -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
     "preminor": "npm run test",
@@ -45,12 +39,6 @@
     "examine-instance": "^1.1.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^10.0.2",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-plugin-transform-es2015-parameters": "^6.24.1",
-    "babel-plugin-transform-es2015-spread": "^6.22.0",
-    "babel-preset-env": "^1.7.0",
     "code": "^5.2.4",
     "eslint": "^6.1.0",
     "lab": "^18.0.2",
@@ -59,6 +47,6 @@
     "istanbul": "^0.4.5"
   },
   "files": [
-    "dist"
+    "src"
   ]
 }

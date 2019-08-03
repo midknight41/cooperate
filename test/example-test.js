@@ -1,5 +1,5 @@
-import { compose } from "../lib/index";
-import assert from "assert";
+const { compose } = require("../src/index");
+const assert = require("assert");
 
 class SpecificFeatures {
 
