@@ -1,5 +1,5 @@
-const { expect } = require("code");
-const Lab = require("lab");
+const { expect } = require("@hapi/code");
+const Lab = require("@hapi/lab");
 const {"default": getHelper} = require("lab-testing");
 const { compose, mapMembers } = require("../src");
 

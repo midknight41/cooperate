@@ -83,5 +83,3 @@ coverage
 
 #Test files
 *.testsettings
-
-package-lock.json

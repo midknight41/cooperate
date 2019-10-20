@@ -5,9 +5,10 @@
   "main": "./dist/lib/index.js",
   "scripts": {
     "cover": "istanbul cover ./node_modules/lab/bin/lab ./dist/test --leaks",
-    "t": "lab ./test/ -v -S --assert code",
+    "t": "lab ./test/ -v -S",
     "travis": "npm run test",
-    "test": "lab ./test/ -v -S --assert code",
+    "pretest": "eslint src",
+    "test": "lab ./test/ -v -S",
     "premajor": "npm run test",
     "major": "npm version major -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
     "preminor": "npm run test",
@@ -39,12 +40,12 @@
     "examine-instance": "^1.1.1"
   },
   "devDependencies": {
-    "code": "^5.2.4",
-    "eslint": "^6.1.0",
-    "lab": "^18.0.2",
+    "@hapi/code": "^7.0.0",
+    "@hapi/lab": "^21.0.0",
+    "eslint": "^6.5.1",
+    "istanbul": "^0.4.5",
     "lab-testing": "^4.0.0",
-    "rimraf": "^2.6.3",
-    "istanbul": "^0.4.5"
+    "rimraf": "^3.0.0"
   },
   "files": [
     "src"
