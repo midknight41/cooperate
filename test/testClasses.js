@@ -1,5 +1,5 @@
 
-export class SpecificFeatures {
+class SpecificFeatures {
 
   constructor(db) {
     this._db = db;
@@ -15,7 +15,7 @@ export class SpecificFeatures {
 
 }
 
-export class GenericFeatures {
+class GenericFeatures {
 
   constructor(db) {
     this._genericDb = db;
@@ -38,7 +38,7 @@ export class GenericFeatures {
 
 }
 
-export class OverlappingMethod {
+class OverlappingMethod {
 
   constructor(db) {
     this._db = db;
@@ -57,24 +57,24 @@ export class OverlappingMethod {
 
 }
 
-export class OverlappingProps {
+class OverlappingProps {
 
   get rw() { return "uh oh"; }
 }
 
-export class MultipleA {
+class MultipleA {
   one() {
     return this.one.name;
   }
 }
 
-export class MultipleB {
+class MultipleB {
   two() {
     return this.two.name;
   }
 }
 
-export class MultipleC {
+class MultipleC {
   three() {
     return this.three.name;
   }
@@ -84,7 +84,7 @@ export class MultipleC {
   }
 }
 
-export class MultipleCollision {
+class MultipleCollision {
   three() {
     return this.three.name;
   }
@@ -94,3 +94,13 @@ export class MultipleCollision {
   }
 }
 
+module.exports = {
+  MultipleCollision,
+  MultipleC,
+  MultipleB,
+  MultipleA,
+  OverlappingProps,
+  OverlappingMethod,
+  GenericFeatures,
+  SpecificFeatures
+};

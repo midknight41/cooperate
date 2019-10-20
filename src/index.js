@@ -1,7 +1,7 @@
-import examine from "examine-instance";
-import assert from "assert";
-import MemberMaps from "./MemberMaps";
-import CooperateWrapper from "./CooperateWrapper";
+const {"default": examine} = require("examine-instance");
+const assert = require("assert");
+const MemberMaps = require("./MemberMaps");
+const CooperateWrapper = require("./CooperateWrapper");
 
 const noPrivate = /^_|_$/;
 
@@ -120,7 +120,7 @@ function processOptions(obj, options) {
 
 }
 
-export function compose(objectArray, options) {
+function compose(objectArray, options) {
 
   // make options safe to use
   const opts = options || {};
@@ -145,6 +145,11 @@ export function compose(objectArray, options) {
 
 }
 
-export function mapMembers(sourceObject) {
+function mapMembers(sourceObject) {
   return new MemberMaps(sourceObject);
 }
+
+module.exports = {
+  compose,
+  mapMembers
+};
