@@ -1,5 +1,5 @@
 // This simple class makes the fluent interface work
-export default class MemberMap {
+class MemberMap {
 
   constructor(parent, sourceName) {
 
@@ -32,3 +32,5 @@ export default class MemberMap {
   }
 
 }
+
+module.exports = MemberMap;

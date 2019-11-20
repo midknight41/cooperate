@@ -1,15 +1,15 @@
 // Testing Framework
-import * as Code from "code";
-import * as Lab from "lab";
-import getHelper from "lab-testing";
-import { AssertionError } from "assert";
+const Code = require("@hapi/code");
+const Lab = require("@hapi/lab");
+const {"default": getHelper} = require("lab-testing");
+const { AssertionError } = require("assert");
 
-import { compose } from "../lib/index";
-import {
+const { compose } = require("../src/index");
+const {
   SpecificFeatures, GenericFeatures,
   OverlappingMethod, OverlappingProps,
   MultipleA, MultipleB, MultipleC, MultipleCollision
-} from "./testClasses";
+} = require("./testClasses");
 
 const lab = exports.lab = Lab.script();
 const expect = Code.expect;

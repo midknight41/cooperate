@@ -1,7 +1,7 @@
-import { expect } from "code";
-import * as Lab from "lab";
-import getHelper from "lab-testing";
-import { compose, mapMembers } from "../lib";
+const { expect } = require("@hapi/code");
+const Lab = require("@hapi/lab");
+const {"default": getHelper} = require("lab-testing");
+const { compose, mapMembers } = require("../src");
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);

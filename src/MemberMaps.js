@@ -1,8 +1,8 @@
-import assert from "assert";
-import MemberMap from "./MemberMap";
+const assert = require("assert");
+const MemberMap = require("./MemberMap");
 
 // this class represents all the mappings for a single source object
-export default class MemberMaps {
+class MemberMaps {
 
   constructor(sourceObject) {
 
@@ -44,3 +44,5 @@ export default class MemberMaps {
   }
 
 }
+
+module.exports = MemberMaps;
