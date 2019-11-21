@@ -1,10 +1,18 @@
+### 2.0.3
+
+Resolved bug introduced in 2.0.2 which prevented usage of the package due to incorrect main file configuration.
+
+### 2.0.2
+
+Updated dependencies.
+
 ### 2.0.1
 
 Updated dependencies.
 
 ### 2.0.0
 
-The method signature for compose has been changed from a parameter array to a normal array of objects. This is a **breaking change**. 
+The method signature for compose has been changed from a parameter array to a normal array of objects. This is a **breaking change**.
 
 #### Old Code
 
@@ -26,7 +34,7 @@ import assert from "assert";
 
 // Assume all three capabilities here support a property called isWorking.
 import capability1 from "./ capability1";
-import capability2 from "./ capability2"; 
+import capability2 from "./ capability2";
 import capability3 from "./ capability3";
 
 const service = compose([capability1, capability2, capability3], { hide: ["isWorking"] });

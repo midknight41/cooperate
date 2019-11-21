@@ -51,6 +51,7 @@ _ReSharper*/
 *.resharper
 [Tt]est[Rr]esult*
 *.sass-cache
+.npmrc
 
 #Project files
 [Bb]uild/

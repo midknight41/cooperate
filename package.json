@@ -2,7 +2,7 @@
   "name": "cooperate",
   "version": "2.0.2",
   "description": "Convention based composition tool that let's you compose a series of objects into a single object quickly.",
-  "main": "./dist/lib/index.js",
+  "main": "./src/index.js",
   "scripts": {
     "cover": "istanbul cover ./node_modules/lab/bin/lab ./dist/test --leaks",
     "t": "lab ./test/ -v -S",
