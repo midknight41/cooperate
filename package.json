@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@hapi/code": "^7.0.0",
-    "@hapi/lab": "^21.0.0",
+    "@hapi/lab": "^22.0.2",
     "eslint": "^6.5.1",
     "istanbul": "^0.4.5",
     "lab-testing": "^4.0.0",
