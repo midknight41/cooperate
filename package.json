@@ -40,7 +40,7 @@
     "examine-instance": "^1.1.1"
   },
   "devDependencies": {
-    "@hapi/code": "^7.0.0",
+    "@hapi/code": "^8.0.0",
     "@hapi/lab": "^21.0.0",
     "eslint": "^6.5.1",
     "istanbul": "^0.4.5",
